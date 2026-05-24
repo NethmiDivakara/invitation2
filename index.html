@@ -126,29 +126,44 @@
             transform: rotate(-15deg);
         }
 
+        /* New Neptune on the right side */
+        .neptune {
+            width: 45px; height: 45px;
+            background: radial-gradient(circle at 30% 30%, #4ea8de, #005f96);
+            box-shadow: inset -6px -6px 12px rgba(0,0,0,0.8), 0 0 14px rgba(78,168,222,0.4);
+            top: 52%; right: 5%;
+            animation-delay: 2s;
+        }
+
         .moon {
             width: 30px; height: 30px;
             background: radial-gradient(circle at 30% 30%, #e0e0e0, #545454);
             box-shadow: inset -5px -5px 10px rgba(0,0,0,0.8), 0 0 10px rgba(255,255,255,0.1);
-            top: 58%; right: 8%;
+            top: 63%; right: 12%;
             animation-delay: 3s;
         }
 
-        /* Floating Characters */
+        /* Floating Characters — scattered, not in a line */
         .char-float {
             position: absolute;
             animation: float-char 8s ease-in-out infinite;
             z-index: 4;
         }
 
-        .alien-1 { top: 14%; left: 30%; width: 48px; animation-delay: 0.5s; filter: drop-shadow(0 0 8px rgba(167,243,208,0.45)); }
-        .alien-2 { top: 42%; right: 28%; width: 40px; animation-delay: 1.8s; filter: drop-shadow(0 0 8px rgba(251,146,60,0.45)); }
-        .alien-3 { top: 18%; right: 30%; width: 42px; animation-delay: 1s; filter: drop-shadow(0 0 8px rgba(216,180,254,0.45)); }
-        .alien-4 { top: 44%; left: 16%; width: 44px; animation-delay: 2s; filter: drop-shadow(0 0 8px rgba(244,114,182,0.5)); }
+        /* Left column aliens */
+        .alien-1 { top: 14%; left: 28%; width: 48px; animation-delay: 0.5s; filter: drop-shadow(0 0 8px rgba(167,243,208,0.45)); }
+        .alien-4 { top: 38%; left: 8%;  width: 44px; animation-delay: 2s;   filter: drop-shadow(0 0 8px rgba(244,114,182,0.5)); }
+
+        /* Right column aliens — shifted inward so they don't clash with new planet */
+        .alien-3 { top: 20%; right: 34%; width: 42px; animation-delay: 1s;   filter: drop-shadow(0 0 8px rgba(216,180,254,0.45)); }
+        .alien-2 { top: 46%; right: 32%; width: 40px; animation-delay: 1.8s; filter: drop-shadow(0 0 8px rgba(251,146,60,0.45)); }
+
+        /* Extra alien near center-bottom for depth */
+        .alien-5 { top: 60%; left: 22%; width: 38px; animation-delay: 3s; filter: drop-shadow(0 0 8px rgba(165,243,252,0.45)); }
 
         @keyframes float-char {
-            0% { transform: translate(0, 0) rotate(0deg); }
-            50% { transform: translate(-5px, -10px) rotate(-6deg); }
+            0%   { transform: translate(0, 0) rotate(0deg); }
+            50%  { transform: translate(-5px, -10px) rotate(-6deg); }
             100% { transform: translate(0, 0) rotate(0deg); }
         }
 
@@ -375,7 +390,7 @@
             line-height: 1.5;
         }
 
-        /* Custom cursor (desktop only) */
+        /* Custom cursor — desktop only */
         @media (pointer: fine) {
             body { cursor: none; }
         }
@@ -421,7 +436,7 @@
 
         @keyframes cursorOrbit {
             from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+            to   { transform: rotate(360deg); }
         }
 
         /* Launched states */
@@ -446,20 +461,22 @@
         }
 
         @keyframes flameFlicker {
-            0%  { transform: translateX(-50%) scaleX(1.4) scaleY(1.6); }
-            100%{ transform: translateX(-50%) scaleX(1.2) scaleY(1.9); filter: blur(1px); }
+            0%   { transform: translateX(-50%) scaleX(1.4) scaleY(1.6); }
+            100% { transform: translateX(-50%) scaleX(1.2) scaleY(1.9); filter: blur(1px); }
         }
 
-        /* Responsive tweaks for larger phones / tablets */
+        /* Responsive: larger phones / tablets */
         @media (min-width: 480px) {
-            .earth  { width: 70px; height: 70px; }
-            .mars   { width: 45px; height: 45px; }
-            .jupiter{ width: 90px; height: 90px; }
-            .saturn { width: 60px; height: 60px; }
+            .earth   { width: 70px; height: 70px; }
+            .mars    { width: 45px; height: 45px; }
+            .jupiter { width: 90px; height: 90px; }
+            .saturn  { width: 60px; height: 60px; }
             .saturn-rings { width: 108px; height: 20px; top: 20px; left: -24px; }
-            .moon   { width: 40px; height: 40px; }
+            .neptune { width: 58px; height: 58px; }
+            .moon    { width: 40px; height: 40px; }
             .alien-1, .alien-3 { width: 58px; }
             .alien-2, .alien-4 { width: 52px; }
+            .alien-5 { width: 48px; }
             .invitation-card h1 { font-size: 1.75rem; }
             .invitation-card p  { font-size: 0.95rem; }
             .detail-item        { font-size: 0.9rem; }
@@ -494,9 +511,12 @@
             <div class="saturn-rings"></div>
         </div>
 
+        <!-- Neptune — new planet on the right side -->
+        <div class="planet neptune"></div>
+
         <div class="planet moon"></div>
 
-        <!-- Alien 1 – green -->
+        <!-- Alien 1 – green, top-left area -->
         <div class="char-float alien-1">
             <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M32 12C20 12 16 22 16 32C16 42 22 48 32 48C42 48 48 42 48 32C48 22 44 12 32 12Z" fill="#a7f3d0"/>
@@ -514,7 +534,22 @@
             </svg>
         </div>
 
-        <!-- Alien 2 – purple -->
+        <!-- Alien 2 – orange, right-center area -->
+        <div class="char-float alien-2">
+            <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M32 12C24 12 20 20 20 30C20 38 24 42 32 42C40 42 44 38 44 30C44 20 40 12 32 12Z" fill="#fb923c"/>
+                <path d="M26 14Q20 6 22 4" stroke="#fb923c" stroke-width="2" fill="none"/>
+                <path d="M38 14Q44 6 42 4" stroke="#fb923c" stroke-width="2" fill="none"/>
+                <circle cx="22" cy="4" r="2.5" fill="#f97316"/>
+                <circle cx="42" cy="4" r="2.5" fill="#f97316"/>
+                <ellipse cx="26" cy="26" rx="4" ry="5" fill="#1e293b"/>
+                <ellipse cx="38" cy="26" rx="4" ry="5" fill="#1e293b"/>
+                <path d="M28 34H36" stroke="#1e293b" stroke-width="2" stroke-linecap="round"/>
+                <path d="M24 42L20 54H44L40 42H24Z" fill="#f97316"/>
+            </svg>
+        </div>
+
+        <!-- Alien 3 – purple, top-right area -->
         <div class="char-float alien-3">
             <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M32 10C20 10 14 20 14 32C14 44 20 52 32 52C44 52 50 44 50 32C50 20 44 10 32 10Z" fill="#d8b4fe"/>
@@ -528,7 +563,7 @@
             </svg>
         </div>
 
-        <!-- Alien 3 – pink -->
+        <!-- Alien 4 – pink, left-mid area -->
         <div class="char-float alien-4">
             <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M32 16C22 16 14 22 14 34C14 44 22 48 32 48C42 48 50 44 50 34C50 22 42 16 32 16Z" fill="#f472b6"/>
@@ -543,18 +578,18 @@
             </svg>
         </div>
 
-        <!-- Alien 4 – orange -->
-        <div class="char-float alien-2">
+        <!-- Alien 5 – cyan, lower-left area -->
+        <div class="char-float alien-5">
             <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M32 12C24 12 20 20 20 30C20 38 24 42 32 42C40 42 44 38 44 30C44 20 40 12 32 12Z" fill="#fb923c"/>
-                <path d="M26 14Q20 6 22 4" stroke="#fb923c" stroke-width="2" fill="none"/>
-                <path d="M38 14Q44 6 42 4" stroke="#fb923c" stroke-width="2" fill="none"/>
-                <circle cx="22" cy="4" r="2.5" fill="#f97316"/>
-                <circle cx="42" cy="4" r="2.5" fill="#f97316"/>
-                <ellipse cx="26" cy="26" rx="4" ry="5" fill="#1e293b"/>
-                <ellipse cx="38" cy="26" rx="4" ry="5" fill="#1e293b"/>
-                <path d="M28 34H36" stroke="#1e293b" stroke-width="2" stroke-linecap="round"/>
-                <path d="M24 42L20 54H44L40 42H24Z" fill="#f97316"/>
+                <path d="M32 14C22 14 16 22 16 32C16 42 22 46 32 46C42 46 48 42 48 32C48 22 42 14 32 14Z" fill="#a5f3fc"/>
+                <ellipse cx="22" cy="26" rx="4" ry="6" fill="#ffffff" stroke="#1e293b" stroke-width="1"/>
+                <circle cx="22" cy="26" r="2" fill="#1e293b"/>
+                <ellipse cx="32" cy="24" rx="4" ry="6" fill="#ffffff" stroke="#1e293b" stroke-width="1"/>
+                <circle cx="32" cy="24" r="2" fill="#1e293b"/>
+                <ellipse cx="42" cy="26" rx="4" ry="6" fill="#ffffff" stroke="#1e293b" stroke-width="1"/>
+                <circle cx="42" cy="26" r="2" fill="#1e293b"/>
+                <path d="M26 36H38" stroke="#1e293b" stroke-width="2" stroke-linecap="round"/>
+                <path d="M26 46L24 56H40L38 46H26Z" fill="#22d3ee"/>
             </svg>
         </div>
 
@@ -628,7 +663,6 @@
             }, 3000);
         });
 
-        // Custom solar cursor (only active on pointer-fine / desktop)
         window.addEventListener('mousemove', (e) => {
             solarCursor.style.left = e.clientX + 'px';
             solarCursor.style.top  = e.clientY + 'px';
