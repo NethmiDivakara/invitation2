@@ -1,672 +1,942 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cosmic Talent Show - Chief Guest Invitation</title>
-    <style>
-        :root {
-            --night-sky: radial-gradient(circle at 50% 50%, #050b14 0%, #010306 100%);
-            --cloud-main: #f1f5f9;
-            --cloud-shadow: #cbd5e1;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cosmic Talent Show - Chief Guest Invitation</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Rajdhani:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+/* ── CORE RESET & VARIABLES ── */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+:root {
+  --sky-dark: #03050d;
+  --blue-glow: #38bdf8;
+  --purple-glow: #7c3aed;
+  --gold-glow: #f59e0b;
+  --night-sky: radial-gradient(circle at 50% 50%, #050b14 0%, #010306 100%);
+  --cloud-main: #f1f5f9;
+  --cloud-shadow: #cbd5e1;
+}
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-        }
+html, body {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background: var(--sky-dark);
+  font-family: 'Rajdhani', sans-serif;
+  cursor: none;
+}
 
-        body, html {
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            background: var(--night-sky);
-            cursor: none;
-        }
+/* ── MINIATURE ORBIT SYSTEM CURSOR (desktop only) ── */
+#cur-system {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  z-index: 99999;
+}
+#cur-dot {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: #ffffff;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 10px #ffffff, 0 0 20px rgba(56, 189, 248, 0.5);
+}
+#cur-ring {
+  position: absolute;
+  width: 38px;
+  height: 38px;
+  border: 1px dashed rgba(56, 189, 248, 0.4);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.25s ease, height 0.25s ease, border-color 0.25s ease;
+  animation: cursorOrbitSpin 3s linear infinite; 
+}
+#cur-moon {
+  position: absolute;
+  top: -3px;
+  left: 50%;
+  width: 5px;
+  height: 5px;
+  background: var(--blue-glow);
+  border-radius: 50%;
+  transform: translateX(-50%);
+  box-shadow: 0 0 8px var(--blue-glow);
+  transition: background 0.25s ease, box-shadow 0.25s ease;
+}
+body.hov #cur-ring {
+  width: 56px;
+  height: 56px;
+  border-color: rgba(245, 158, 11, 0.6);
+}
+body.hov #cur-moon {
+  background: var(--gold-glow);
+  box-shadow: 0 0 8px var(--gold-glow);
+}
+body.click #cur-ring {
+  width: 20px;
+  height: 20px;
+  border-color: #e879f9;
+}
+@keyframes cursorOrbitSpin {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+/* Hide custom cursor on touch devices */
+@media (hover: none) and (pointer: coarse) {
+  html, body { cursor: auto; }
+  #cur-system { display: none; }
+}
 
-        .universe {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+/* ── STAGE 1: INTRO CANVASES & CURTAINS ── */
+#curtain {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  pointer-events: none;
+}
+#curt-left {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 100%;
+  overflow: hidden;
+  transition: transform 2.0s cubic-bezier(0.76, 0, 0.24, 1);
+}
+#curt-right {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 50%;
+  height: 100%;
+  overflow: hidden;
+  transition: transform 2.0s cubic-bezier(0.76, 0, 0.24, 1);
+}
+#cloud-L { position: absolute; top: 0; left: 0; }
+#cloud-R { position: absolute; top: 0; left: -100%; }
+#curtain.open #curt-left  { transform: translateX(-100%); }
+#curtain.open #curt-right { transform: translateX(100%); }
 
-        .stars {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: transparent;
-            background-image:
-                radial-gradient(rgba(255, 255, 255, 1) 0.75px, transparent 1.25px),
-                radial-gradient(rgba(255, 255, 255, 0.9) 1px, transparent 1.75px),
-                radial-gradient(rgba(255, 255, 255, 0.8) 0.5px, transparent 1px),
-                radial-gradient(rgba(254, 240, 138, 0.9) 1px, transparent 1.5px),
-                radial-gradient(rgba(186, 230, 253, 0.7) 0.75px, transparent 1.25px);
-            background-size: 140px 140px, 200px 200px, 260px 260px, 320px 320px, 380px 380px;
-            background-position: 0 0, 25px 60px, 90px 150px, 180px 30px, 110px 250px;
-            animation: twinkle 6s infinite ease-in-out;
-            opacity: 0.9;
-        }
+/* ── UNIVERSE LAYOUT ── */
+.universe {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--night-sky);
+  z-index: 10;
+}
 
-        @keyframes twinkle {
-            0%, 100% { opacity: 0.7; }
-            50% { opacity: 1; }
-        }
+/* Star Field */
+.stars {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    radial-gradient(rgba(255,255,255,1) 0.75px, transparent 1.25px),
+    radial-gradient(rgba(255,255,255,0.9) 1px, transparent 1.75px),
+    radial-gradient(rgba(255,255,255,0.8) 0.5px, transparent 1px),
+    radial-gradient(rgba(254,240,138,0.9) 1px, transparent 1.5px),
+    radial-gradient(rgba(186,230,253,0.7) 0.75px, transparent 1.25px);
+  background-size: 180px 180px, 260px 260px, 320px 320px, 400px 400px, 480px 480px;
+  background-position: 0 0, 30px 80px, 110px 190px, 220px 40px, 150px 310px;
+  animation: twinkle 6s infinite ease-in-out;
+  opacity: 0.9;
+}
+@keyframes twinkle {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; }
+}
 
-        .planet {
-            position: absolute;
-            border-radius: 50%;
-            animation: float 6s ease-in-out infinite;
-        }
+/* ── PLANETS ── */
+.planet {
+  position: absolute;
+  border-radius: 50%;
+  animation: floatPlanet 6s ease-in-out infinite;
+}
+@keyframes floatPlanet {
+  0%   { transform: translateY(0px) rotate(0deg); }
+  50%  { transform: translateY(-10px) rotate(3deg); }
+  100% { transform: translateY(0px) rotate(0deg); }
+}
 
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-7px); }
-            100% { transform: translateY(0px); }
-        }
+.earth {
+  width: 100px; height: 100px;
+  background: radial-gradient(circle at 30% 30%, #4b9fe1, #162f65);
+  box-shadow: inset -12px -12px 25px rgba(0,0,0,0.8), 0 0 25px rgba(75,159,225,0.4);
+  top: 12%; left: 4%;
+  animation-delay: 0s;
+}
+.earth::before {
+  content: '';
+  position: absolute;
+  width: 40px; height: 30px;
+  background: #52b760;
+  border-radius: 40% 50% 30% 40%;
+  top: 20px; left: 15px;
+  filter: blur(1px);
+  opacity: 0.9;
+}
+.mars {
+  width: 60px; height: 60px;
+  background: radial-gradient(circle at 30% 30%, #e76f51, #7c250b);
+  box-shadow: inset -8px -8px 18px rgba(0,0,0,0.8), 0 0 20px rgba(231,111,81,0.35);
+  top: 32%; left: 14%;
+  animation-delay: 1.5s;
+}
+.jupiter {
+  width: 130px; height: 130px;
+  background: linear-gradient(to bottom, #78350f, #a66c34, #d4a373, #a66c34, #78350f);
+  box-shadow: inset -15px -15px 30px rgba(0,0,0,0.8), 0 0 35px rgba(212,163,115,0.3);
+  top: 6%; right: 32%;
+  animation-delay: 2.5s;
+}
+.saturn-container {
+  position: absolute;
+  top: 35%; right: 8%;
+  animation: floatPlanet 7s ease-in-out infinite;
+  animation-delay: 0.5s;
+  filter: drop-shadow(0 0 15px rgba(226,156,82,0.3));
+}
+.saturn {
+  width: 90px; height: 90px;
+  background: radial-gradient(circle at 30% 30%, #e29c52, #8f4713);
+  border-radius: 50%;
+  box-shadow: inset -12px -12px 20px rgba(0,0,0,0.7);
+}
+.saturn-rings {
+  position: absolute;
+  width: 160px; height: 30px;
+  border: 15px solid rgba(226,156,82,0.5);
+  border-radius: 50%;
+  top: 30px; left: -35px;
+  transform: rotate(-15deg);
+  box-shadow: 0 5px 5px rgba(0,0,0,0.4);
+}
+.uranus-container {
+  position: absolute;
+  top: 65%; left: 28%;
+  animation: floatPlanet 8s ease-in-out infinite;
+  animation-delay: 4s;
+  filter: drop-shadow(0 0 15px rgba(6,182,212,0.3));
+}
+.uranus {
+  width: 70px; height: 70px;
+  background: radial-gradient(circle at 30% 30%, #a5f3fc, #0891b2);
+  border-radius: 50%;
+  box-shadow: inset -10px -10px 18px rgba(0,0,0,0.7);
+}
+.uranus-rings {
+  position: absolute;
+  width: 25px; height: 120px;
+  border: 4px solid rgba(165,243,252,0.4);
+  border-radius: 50%;
+  top: -25px; left: 22px;
+  transform: rotate(15deg);
+}
+.neptune {
+  width: 80px; height: 80px;
+  background: radial-gradient(circle at 30% 30%, #4ea8de, #005f96);
+  box-shadow: inset -10px -10px 20px rgba(0,0,0,0.8), 0 0 20px rgba(78,168,222,0.35);
+  top: 58%; left: 4%;
+  animation-delay: 2s;
+}
+.moon {
+  width: 50px; height: 50px;
+  background: radial-gradient(circle at 30% 30%, #e0e0e0, #545454);
+  box-shadow: inset -8px -8px 15px rgba(0,0,0,0.8), 0 0 15px rgba(255,255,255,0.15);
+  top: 62%; right: 12%;
+  animation-delay: 3s;
+}
 
-        .earth {
-            width: 55px; height: 55px;
-            background: radial-gradient(circle at 30% 30%, #4b9fe1, #162f65);
-            box-shadow: inset -7px -7px 14px rgba(0,0,0,0.8), 0 0 15px rgba(75,159,225,0.4);
-            top: 8%; left: 3%;
-            animation-delay: 0s;
-        }
-        .earth::before {
-            content: '';
-            position: absolute;
-            width: 22px; height: 16px;
-            background: #52b760;
-            border-radius: 40% 50% 30% 40%;
-            top: 12px; left: 9px;
-            filter: blur(1px);
-            opacity: 0.9;
-        }
+/* ── CHARACTERS GENERAL ── */
+.char-float {
+  position: absolute;
+  animation: floatChar 8s ease-in-out infinite;
+  z-index: 4;
+}
+@keyframes floatChar {
+  0%   { transform: translate(0, 0) rotate(0deg); }
+  50%  { transform: translate(-10px, -15px) rotate(-8deg); }
+  100% { transform: translate(0, 0) rotate(0deg); }
+}
 
-        .mars {
-            width: 36px; height: 36px;
-            background: radial-gradient(circle at 30% 30%, #e76f51, #7c250b);
-            box-shadow: inset -5px -5px 10px rgba(0,0,0,0.8), 0 0 12px rgba(231,111,81,0.35);
-            top: 25%; left: 10%;
-            animation-delay: 1.5s;
-        }
+/* ══════════════════════════════════════════
+   DESKTOP ALIEN LAYOUT (default / ≥ 769px)
+══════════════════════════════════════════ */
+.astronaut { top: 12%; right: 20%; width: 85px; animation-duration: 8s; filter: drop-shadow(0 0 12px rgba(255,255,255,0.3)); }
+.alien-1 { top: 22%; left: 36%; width: 75px; animation-duration: 7s; animation-delay: 0.5s; filter: drop-shadow(0 0 12px rgba(167,243,208,0.45)); }
+.alien-2 { top: 48%; right: 26%; width: 65px; animation-duration: 9s; animation-delay: 1s; filter: drop-shadow(0 0 12px rgba(216,180,254,0.45)); }
+.alien-3 { top: 10%; left: 24%; width: 70px; animation-duration: 7.5s; animation-delay: 1.5s; filter: drop-shadow(0 0 12px rgba(165,243,252,0.45)); }
+.alien-4 { top: 48%; left: 20%; width: 65px; animation-duration: 6.5s; animation-delay: 2s; filter: drop-shadow(0 0 14px rgba(244,114,182,0.5)); }
+.alien-5 { top: 25%; right: 42%; width: 65px; animation-duration: 8.5s; animation-delay: 0.8s; filter: drop-shadow(0 0 12px rgba(251,146,60,0.45)); }
+.alien-6 { top: 68%; right: 40%; width: 60px; animation-duration: 7.2s; animation-delay: 2.2s; filter: drop-shadow(0 0 10px rgba(163,230,53,0.5)); }
+.alien-7 { top: 72%; left: 12%; width: 55px; animation-duration: 8.2s; animation-delay: 1.4s; filter: drop-shadow(0 0 10px rgba(248,113,113,0.5)); }
+.alien-8 { top: 38%; left: 5%; width: 60px; animation-duration: 7.8s; animation-delay: 0.3s; filter: drop-shadow(0 0 12px rgba(251,191,36,0.4)); }
+.alien-9 { top: 55%; right: 4%; width: 58px; animation-duration: 8.8s; animation-delay: 1.7s; filter: drop-shadow(0 0 12px rgba(94,234,212,0.4)); }
 
-        .jupiter {
-            width: 70px; height: 70px;
-            background: linear-gradient(to bottom, #78350f, #a66c34, #d4a373, #a66c34, #78350f);
-            box-shadow: inset -10px -10px 18px rgba(0,0,0,0.8), 0 0 20px rgba(212,163,115,0.3);
-            top: 4%; right: 4%;
-            animation-delay: 2.5s;
-        }
+/* ══════════════════════════════════════════
+   MOBILE ALIEN LAYOUT (≤ 768px)
+   4 aliens in blank perimeter zones
+══════════════════════════════════════════ */
+@media (max-width: 768px) {
+  /* Hide most aliens on mobile — keep 4 in blank perimeter zones */
+  .alien-3, .alien-4, .alien-5, .alien-6, .alien-7, .alien-8 {
+    display: none !important;
+  }
 
-        .saturn-container {
-            position: absolute;
-            top: 32%; right: 2%;
-            animation: float 7s ease-in-out infinite;
-            animation-delay: 0.5s;
-            filter: drop-shadow(0 0 10px rgba(226,156,82,0.3));
-        }
-        .saturn {
-            width: 48px; height: 48px;
-            background: radial-gradient(circle at 30% 30%, #e29c52, #8f4713);
-            border-radius: 50%;
-            box-shadow: inset -7px -7px 12px rgba(0,0,0,0.7);
-        }
-        .saturn-rings {
-            position: absolute;
-            width: 86px; height: 16px;
-            border: 8px solid rgba(226,156,82,0.5);
-            border-radius: 50%;
-            top: 16px; left: -19px;
-            transform: rotate(-15deg);
-        }
+  /* Shrink heavy planets that eat space */
+  .jupiter   { width: 70px; height: 70px; top: 4%; right: 2%; }
+  .saturn-container { top: auto; bottom: 290px; right: 2%; }
+  .saturn    { width: 55px; height: 55px; }
+  .saturn-rings { width: 100px; height: 20px; top: 18px; left: -22px; border-width: 10px; }
+  .earth     { width: 60px; height: 60px; top: 8%; left: 2%; }
+  .earth::before { width: 24px; height: 18px; top: 12px; left: 9px; }
+  .mars      { width: 36px; height: 36px; top: 20%; left: 6%; }
+  .uranus-container { top: auto; bottom: 280px; left: 4%; }
+  .uranus    { width: 42px; height: 42px; }
+  .uranus-rings { width: 15px; height: 72px; top: -15px; left: 14px; }
+  .neptune   { width: 48px; height: 48px; top: auto; bottom: 300px; left: 2%; }
+  .moon      { width: 32px; height: 32px; top: 6%; right: 18%; }
 
-        /* New Neptune on the right side */
-        .neptune {
-            width: 45px; height: 45px;
-            background: radial-gradient(circle at 30% 30%, #4ea8de, #005f96);
-            box-shadow: inset -6px -6px 12px rgba(0,0,0,0.8), 0 0 14px rgba(78,168,222,0.4);
-            top: 52%; right: 5%;
-            animation-delay: 2s;
-        }
+  /* Smooth mobile float animation */
+  .char-float {
+    animation-name: floatCharMobile;
+  }
+  @keyframes floatCharMobile {
+    0%   { transform: translate(0, 0) rotate(0deg); }
+    50%  { transform: translate(-5px, -8px) rotate(-4deg); }
+    100% { transform: translate(0, 0) rotate(0deg); }
+  }
 
-        .moon {
-            width: 30px; height: 30px;
-            background: radial-gradient(circle at 30% 30%, #e0e0e0, #545454);
-            box-shadow: inset -5px -5px 10px rgba(0,0,0,0.8), 0 0 10px rgba(255,255,255,0.1);
-            top: 63%; right: 12%;
-            animation-delay: 3s;
-        }
+  /* Astronaut — top-center, above card zone */
+  .astronaut {
+    display: block;
+    width: 40px;
+    top: 3%;
+    left: 50%;
+    transform: translateX(-50%);
+    right: auto;
+    animation-duration: 9s;
+  }
 
-        /* Floating Characters — scattered, not in a line */
-        .char-float {
-            position: absolute;
-            animation: float-char 8s ease-in-out infinite;
-            z-index: 4;
-        }
+  /* Alien-1 — mid-left, beside earth/mars strip */
+  .alien-1 {
+    display: block;
+    width: 38px;
+    top: 28%;
+    left: 3%;
+    right: auto;
+    animation-duration: 7.5s;
+    animation-delay: 0.5s;
+  }
 
-        /* Left column aliens */
-        .alien-1 { top: 14%; left: 28%; width: 48px; animation-delay: 0.5s; filter: drop-shadow(0 0 8px rgba(167,243,208,0.45)); }
-        .alien-4 { top: 38%; left: 8%;  width: 44px; animation-delay: 2s;   filter: drop-shadow(0 0 8px rgba(244,114,182,0.5)); }
+  /* Alien-2 — top-right, beside jupiter */
+  .alien-2 {
+    display: block;
+    width: 36px;
+    top: 20%;
+    right: 3%;
+    left: auto;
+    animation-duration: 8.5s;
+    animation-delay: 1.2s;
+  }
 
-        /* Right column aliens — shifted inward so they don't clash with new planet */
-        .alien-3 { top: 20%; right: 34%; width: 42px; animation-delay: 1s;   filter: drop-shadow(0 0 8px rgba(216,180,254,0.45)); }
-        .alien-2 { top: 46%; right: 32%; width: 40px; animation-delay: 1.8s; filter: drop-shadow(0 0 8px rgba(251,146,60,0.45)); }
+  /* Alien-9 — lower-right, above cloud deck */
+  .alien-9 {
+    display: block;
+    width: 36px;
+    top: 56%;
+    right: 3%;
+    left: auto;
+    animation-duration: 8s;
+    animation-delay: 1.8s;
+  }
+}
 
-        /* Extra alien near center-bottom for depth */
-        .alien-5 { top: 60%; left: 22%; width: 38px; animation-delay: 3s; filter: drop-shadow(0 0 8px rgba(165,243,252,0.45)); }
+/* ── ROCKET SETUP ── */
+.rocket-stage {
+  position: absolute;
+  bottom: 150px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  transition: all 2.5s cubic-bezier(0.6, -0.28, 0.735, 0.045);
+  filter: drop-shadow(0 0 15px rgba(255,255,255,0.15));
+}
+.rocket { width: 120px; }
+.flame {
+  position: absolute;
+  bottom: -30px;
+  left: 50%;
+  transform: translateX(-50%) scale(0);
+  transform-origin: top center;
+  width: 30px; height: 50px;
+  background: linear-gradient(to bottom, #ff9e00, #ff0055, transparent);
+  border-radius: 50%;
+  transition: transform 0.3s ease;
+}
 
-        @keyframes float-char {
-            0%   { transform: translate(0, 0) rotate(0deg); }
-            50%  { transform: translate(-5px, -10px) rotate(-6deg); }
-            100% { transform: translate(0, 0) rotate(0deg); }
-        }
+@media (max-width: 768px) {
+  .rocket-stage { bottom: 230px; }
+  .rocket { width: 80px; }
+}
 
-        /* Rocket */
-        .rocket-area {
-            position: absolute;
-            bottom: 230px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 10;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            transition: transform 2.5s cubic-bezier(0.6, -0.28, 0.735, 0.045),
-                        filter 2.5s ease;
-            filter: drop-shadow(0 0 10px rgba(255,255,255,0.1));
-        }
+/* ── BOTTOM CLOUD DECK ── */
+.cloud-deck {
+  position: absolute;
+  bottom: 0; left: 0;
+  width: 100%;
+  height: 260px;
+  z-index: 5;
+  transition: transform 2s cubic-bezier(0.25, 1, 0.5, 1);
+}
+.cloud-puff {
+  position: absolute;
+  background: linear-gradient(to bottom, var(--cloud-main), var(--cloud-shadow));
+  border-radius: 50%;
+  box-shadow: 0 -15px 30px rgba(203,213,225,0.35), inset 0 10px 15px #ffffff;
+}
+.puff-main-center { width: 50%; height: 180px; bottom: -40px; left: 25%; border-radius: 100px 100px 0 0; }
+.puff-left-1  { width: 300px; height: 220px; bottom: -50px; left: -50px; }
+.puff-left-2  { width: 240px; height: 180px; bottom: -30px; left: 15%; }
+.puff-right-1 { width: 320px; height: 240px; bottom: -60px; right: -60px; }
+.puff-right-2 { width: 260px; height: 190px; bottom: -30px; right: 12%; }
+.cloud-base-fill {
+  position: absolute;
+  bottom: 0; left: 0;
+  width: 100%; height: 90px;
+  background: var(--cloud-shadow);
+  box-shadow: inset 0 15px 20px rgba(255,255,255,0.6);
+}
+.cloud-interactive-zone {
+  position: absolute;
+  bottom: 45px; left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  z-index: 6;
+}
+.launch-btn {
+  padding: 16px 45px;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #0d1b2a;
+  background: linear-gradient(45deg, #ff9e00, #ffea00);
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  box-shadow: 0 6px 25px rgba(255,158,0,0.4);
+  transition: all 0.3s ease;
+  letter-spacing: 0.5px;
+}
+.launch-btn:hover { transform: scale(1.05); box-shadow: 0 10px 30px rgba(255,158,0,0.6); }
 
-        .flame {
-            position: absolute;
-            bottom: -18px;
-            left: 50%;
-            transform: translateX(-50%) scale(0);
-            transform-origin: top center;
-            width: 18px; height: 30px;
-            background: linear-gradient(to bottom, #ff9e00, #ff0055, transparent);
-            border-radius: 50%;
-            transition: transform 0.3s ease;
-        }
+@media (max-width: 768px) {
+  .cloud-deck { height: 220px; }
+  .launch-btn { padding: 13px 30px; font-size: 1rem; }
+  .cloud-interactive-zone { bottom: 38px; }
+}
 
-        /* Cloud Deck */
-        .cloud-deck {
-            position: absolute;
-            bottom: 0; left: 0;
-            width: 100%;
-            height: 230px;
-            z-index: 5;
-            transition: transform 2s cubic-bezier(0.25, 1, 0.5, 1);
-        }
+/* ── INVITATION CARD ── */
+.invitation-card {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -30%) scale(0.8);
+  width: 90%;
+  max-width: 500px;
+  background: rgba(13,27,42,0.45);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border: 1px solid rgba(255,255,255,0.15);
+  padding: 40px;
+  border-radius: 24px;
+  color: white;
+  text-align: center;
+  box-shadow: 0 25px 60px rgba(0,0,0,0.8), 0 0 30px rgba(255,234,0,0.08);
+  opacity: 0;
+  visibility: hidden;
+  z-index: 12;
+  transition: all 2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition-delay: 1s;
+}
+.invitation-card h1 {
+  font-family: 'Cinzel', serif;
+  font-size: 2.3rem;
+  margin-bottom: 15px;
+  background: linear-gradient(45deg, #ffea00, #ff9e00);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+.invitation-card p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-bottom: 25px;
+  color: #e0e5ff;
+}
+.event-details {
+  background: rgba(255,255,255,0.06);
+  padding: 20px;
+  border-radius: 16px;
+  margin-bottom: 25px;
+  text-align: left;
+  border: 1px solid rgba(255,255,255,0.05);
+}
+.detail-item {
+  margin-bottom: 12px;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+}
+.detail-item:last-child { margin-bottom: 0; }
+.detail-item strong {
+  color: #ffea00;
+  width: 100px;
+  display: inline-block;
+}
+.rsvp-btn {
+  padding: 12px 30px;
+  background: transparent;
+  border: 2px solid white;
+  color: white;
+  border-radius: 30px;
+  font-size: 1rem;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 15;
+}
+.rsvp-btn:hover { background: white; color: #0d1b2a; }
 
-        .cloud-puff {
-            position: absolute;
-            background: linear-gradient(to bottom, var(--cloud-main), var(--cloud-shadow));
-            border-radius: 50%;
-            box-shadow: 0 -10px 20px rgba(203,213,225,0.3), inset 0 8px 10px #ffffff;
-        }
+/* Mobile card tweaks */
+@media (max-width: 768px) {
+  .invitation-card {
+    padding: 24px 18px;
+    width: 92%;
+    border-radius: 18px;
+  }
+  .invitation-card h1 {
+    font-size: 1.5rem;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+  }
+  .invitation-card p {
+    font-size: 0.92rem;
+    margin-bottom: 16px;
+  }
+  .event-details {
+    padding: 14px;
+    margin-bottom: 16px;
+  }
+  .detail-item { font-size: 0.88rem; margin-bottom: 8px; }
+  .detail-item strong { width: 82px; }
+  .rsvp-btn { padding: 10px 24px; font-size: 0.9rem; }
+}
 
-        .puff-main-center { width: 55%; height: 140px; bottom: -30px; left: 22.5%; border-radius: 80px 80px 0 0; }
-        .puff-left-1     { width: 200px; height: 170px; bottom: -40px; left: -40px; }
-        .puff-left-2     { width: 160px; height: 130px; bottom: -20px; left: 12%; }
-        .puff-right-1    { width: 210px; height: 180px; bottom: -45px; right: -45px; }
-        .puff-right-2    { width: 170px; height: 140px; bottom: -20px; right: 10%; }
+/* ── SUCCESS MODAL ── */
+.custom-popup-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(1,3,6,0.7);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.4s ease-in-out;
+}
+.custom-popup-overlay.show { opacity: 1; visibility: visible; }
+.custom-popup-box {
+  background: rgba(20,35,55,0.9);
+  border: 2px solid rgba(255,234,0,0.3);
+  box-shadow: 0 15px 40px rgba(0,0,0,0.6), 0 0 25px rgba(255,234,0,0.15);
+  padding: 35px 50px;
+  border-radius: 20px;
+  text-align: center;
+  max-width: 450px;
+  width: 90%;
+  transform: scale(0.8);
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.custom-popup-overlay.show .custom-popup-box { transform: scale(1); }
+.custom-popup-box h2 {
+  font-family: 'Cinzel', serif;
+  font-size: 2rem;
+  background: linear-gradient(45deg, #ffea00, #ff9e00);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 15px;
+}
+.custom-popup-box p { color: #f1f5f9; font-size: 1.1rem; line-height: 1.5; }
 
-        .cloud-base-fill {
-            position: absolute;
-            bottom: 0; left: 0;
-            width: 100%; height: 70px;
-            background: var(--cloud-shadow);
-            box-shadow: inset 0 12px 16px rgba(255,255,255,0.5);
-        }
+/* ── LAUNCHED STATE ── */
+.launched .rocket-stage {
+  transform: translate(-50%, -120vh);
+  filter: drop-shadow(0 0 30px #ff9e00);
+}
+.launched .flame {
+  transform: translateX(-50%) scale(1.8);
+  animation: flameFlicker 0.1s infinite alternate;
+}
+.launched .cloud-deck { transform: translateY(280px); }
+.launched .invitation-card {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, -50%) scale(1);
+}
+@keyframes flameFlicker {
+  0%   { transform: translateX(-50%) scaleX(1.5) scaleY(1.7); }
+  100% { transform: translateX(-50%) scaleX(1.3) scaleY(2); filter: blur(1px); }
+}
 
-        .cloud-interactive-zone {
-            position: absolute;
-            bottom: 30px; left: 0;
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            z-index: 6;
-        }
-
-        .launch-btn {
-            padding: 13px 36px;
-            font-size: 1rem;
-            font-weight: bold;
-            color: #0d1b2a;
-            background: linear-gradient(45deg, #ff9e00, #ffea00);
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            box-shadow: 0 5px 20px rgba(255,158,0,0.4);
-            transition: all 0.3s ease;
-            letter-spacing: 0.5px;
-        }
-
-        .launch-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 8px 25px rgba(255,158,0,0.6);
-        }
-
-        /* Invitation Card */
-        .invitation-card {
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -30%) scale(0.85);
-            width: 88%;
-            max-width: 420px;
-            background: rgba(13, 27, 42, 0.55);
-            backdrop-filter: blur(14px);
-            -webkit-backdrop-filter: blur(14px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            padding: 28px 22px;
-            border-radius: 20px;
-            color: white;
-            text-align: center;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.8), 0 0 20px rgba(255,234,0,0.06);
-            opacity: 0;
-            visibility: hidden;
-            z-index: 2;
-            transition: all 1.8s cubic-bezier(0.34, 1.56, 0.64, 1);
-            transition-delay: 0.8s;
-        }
-
-        .invitation-card h1 {
-            font-size: 1.5rem;
-            margin-bottom: 10px;
-            background: linear-gradient(45deg, #ffea00, #ff9e00);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-        }
-
-        .invitation-card p {
-            font-size: 0.9rem;
-            line-height: 1.55;
-            margin-bottom: 16px;
-            color: #e0e5ff;
-        }
-
-        .event-details {
-            background: rgba(255, 255, 255, 0.06);
-            padding: 14px 16px;
-            border-radius: 12px;
-            margin-bottom: 18px;
-            text-align: left;
-            border: 1px solid rgba(255,255,255,0.06);
-        }
-
-        .detail-item {
-            margin-bottom: 10px;
-            font-size: 0.85rem;
-            display: flex;
-            align-items: flex-start;
-            gap: 6px;
-        }
-
-        .detail-item:last-child { margin-bottom: 0; }
-
-        .detail-item strong {
-            color: #ffea00;
-            min-width: 90px;
-            display: inline-block;
-        }
-
-        .rsvp-btn {
-            padding: 10px 28px;
-            background: transparent;
-            border: 2px solid white;
-            color: white;
-            border-radius: 30px;
-            font-size: 0.9rem;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-
-        .rsvp-btn:hover {
-            background: white;
-            color: #0d1b2a;
-        }
-
-        /* Popup */
-        .custom-popup-overlay {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(1, 3, 6, 0.7);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 10000;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.4s ease-in-out;
-        }
-
-        .custom-popup-overlay.show {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .custom-popup-box {
-            background: rgba(20, 35, 55, 0.9);
-            border: 2px solid rgba(255, 234, 0, 0.3);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.6), 0 0 25px rgba(255,234,0,0.15);
-            padding: 28px 32px;
-            border-radius: 18px;
-            text-align: center;
-            max-width: 340px;
-            width: 88%;
-            transform: scale(0.8);
-            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-
-        .custom-popup-overlay.show .custom-popup-box {
-            transform: scale(1);
-        }
-
-        .custom-popup-box h2 {
-            font-size: 1.6rem;
-            background: linear-gradient(45deg, #ffea00, #ff9e00);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 12px;
-        }
-
-        .custom-popup-box p {
-            color: #f1f5f9;
-            font-size: 1rem;
-            line-height: 1.5;
-        }
-
-        /* Custom cursor — desktop only */
-        @media (pointer: fine) {
-            body { cursor: none; }
-        }
-
-        #solar-cursor {
-            position: fixed;
-            width: 30px; height: 30px;
-            pointer-events: none;
-            z-index: 9999;
-            transform: translate(-50%, -50%);
-            display: none;
-        }
-
-        @media (pointer: fine) {
-            #solar-cursor { display: block; }
-        }
-
-        .sun-dot {
-            position: absolute;
-            top: 50%; left: 50%;
-            width: 8px; height: 8px;
-            background: #ffea00;
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            box-shadow: 0 0 10px #ffea00, 0 0 20px #ff9e00;
-        }
-
-        .planet-orbit {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            animation: cursorOrbit 2s linear infinite;
-        }
-
-        .orbit-dot {
-            position: absolute;
-            top: 0; left: 50%;
-            width: 4px; height: 4px;
-            background: #cbd5e1;
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-        }
-
-        @keyframes cursorOrbit {
-            from { transform: rotate(0deg); }
-            to   { transform: rotate(360deg); }
-        }
-
-        /* Launched states */
-        .launched .rocket-area {
-            transform: translateX(-50%) translateY(-120vh);
-            filter: drop-shadow(0 0 25px #ff9e00);
-        }
-
-        .launched .flame {
-            transform: translateX(-50%) scale(1.6);
-            animation: flameFlicker 0.1s infinite alternate;
-        }
-
-        .launched .cloud-deck {
-            transform: translateY(250px);
-        }
-
-        .launched .invitation-card {
-            opacity: 1;
-            visibility: visible;
-            transform: translate(-50%, -50%) scale(1);
-        }
-
-        @keyframes flameFlicker {
-            0%   { transform: translateX(-50%) scaleX(1.4) scaleY(1.6); }
-            100% { transform: translateX(-50%) scaleX(1.2) scaleY(1.9); filter: blur(1px); }
-        }
-
-        /* Responsive: larger phones / tablets */
-        @media (min-width: 480px) {
-            .earth   { width: 70px; height: 70px; }
-            .mars    { width: 45px; height: 45px; }
-            .jupiter { width: 90px; height: 90px; }
-            .saturn  { width: 60px; height: 60px; }
-            .saturn-rings { width: 108px; height: 20px; top: 20px; left: -24px; }
-            .neptune { width: 58px; height: 58px; }
-            .moon    { width: 40px; height: 40px; }
-            .alien-1, .alien-3 { width: 58px; }
-            .alien-2, .alien-4 { width: 52px; }
-            .alien-5 { width: 48px; }
-            .invitation-card h1 { font-size: 1.75rem; }
-            .invitation-card p  { font-size: 0.95rem; }
-            .detail-item        { font-size: 0.9rem; }
-        }
-    </style>
+/* Mobile launched adjustments */
+@media (max-width: 768px) {
+  .launched .cloud-deck { transform: translateY(240px); }
+}
+</style>
 </head>
 <body>
 
-    <div id="solar-cursor">
-        <div class="sun-dot"></div>
-        <div class="planet-orbit">
-            <div class="orbit-dot"></div>
-        </div>
+<div id="cur-system">
+  <div id="cur-ring"><div id="cur-moon"></div></div>
+  <div id="cur-dot"></div>
+</div>
+
+<div id="curtain">
+  <div id="curt-left"><canvas id="cloud-L"></canvas></div>
+  <div id="curt-right"><canvas id="cloud-R"></canvas></div>
+</div>
+
+<div class="custom-popup-overlay" id="successPopup">
+  <div class="custom-popup-box">
+    <h2>Thank You</h2>
+    <p id="popupMessage">Thank you for accepting our invitation.<br>This page will close in 3 seconds.</p>
+  </div>
+</div>
+
+<div class="universe" id="universeContainer">
+  <div class="stars"></div>
+
+  <div class="planet earth"></div>
+  <div class="planet mars"></div>
+  <div class="planet jupiter"></div>
+  <div class="saturn-container"><div class="saturn"></div><div class="saturn-rings"></div></div>
+  <div class="uranus-container"><div class="uranus"></div><div class="uranus-rings"></div></div>
+  <div class="planet neptune"></div>
+  <div class="planet moon"></div>
+
+  <div class="char-float astronaut">
+    <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="32" cy="24" r="12" fill="#E6E6E6"/>
+      <rect x="23" y="17" width="18" height="12" rx="6" fill="#333333"/>
+      <rect x="25" y="19" width="14" height="8" rx="4" fill="#4B9FE1" opacity="0.7"/>
+      <rect x="20" y="36" width="24" height="16" rx="8" fill="#E6E6E6"/>
+      <rect x="14" y="38" width="7" height="12" rx="3.5" fill="#CCCCCC"/>
+      <rect x="43" y="38" width="7" height="12" rx="3.5" fill="#CCCCCC"/>
+      <path d="M20 42C10 42 5 30 0 35" stroke="white" stroke-width="1" stroke-dasharray="2,2"/>
+    </svg>
+  </div>
+
+  <div class="char-float alien-1">
+    <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M32 12C20 12 16 22 16 32C16 42 22 48 32 48C42 48 48 42 48 32C48 22 44 12 32 12Z" fill="#a7f3d0"/>
+      <path d="M24 14L18 6" stroke="#a7f3d0" stroke-width="3" stroke-linecap="round"/>
+      <path d="M40 14L46 6" stroke="#a7f3d0" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="18" cy="5" r="4" fill="#34d399"/>
+      <circle cx="46" cy="5" r="4" fill="#34d399"/>
+      <ellipse cx="25" cy="28" rx="5" ry="7" fill="#1e293b"/>
+      <ellipse cx="39" cy="28" rx="5" ry="7" fill="#1e293b"/>
+      <circle cx="24" cy="26" r="2" fill="#ffffff"/>
+      <circle cx="38" cy="26" r="2" fill="#ffffff"/>
+      <path d="M28 38C28 40 34 40 34 38" stroke="#1e293b" stroke-width="2" stroke-linecap="round"/>
+      <path d="M24 46L20 56H44L40 46H24Z" fill="#38bdf8"/>
+      <rect x="28" y="48" width="8" height="5" rx="1" fill="#f43f5e"/>
+    </svg>
+  </div>
+
+  <div class="char-float alien-2">
+    <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M32 10C20 10 14 20 14 32C14 44 20 52 32 52C44 52 50 44 50 32C50 20 44 10 32 10Z" fill="#d8b4fe"/>
+      <path d="M32 10V4" stroke="#d8b4fe" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="32" cy="4" r="4" fill="#a855f7"/>
+      <circle cx="32" cy="26" r="10" fill="#ffffff" stroke="#1e293b" stroke-width="2"/>
+      <circle cx="32" cy="26" r="5" fill="#1e293b"/>
+      <circle cx="30" cy="24" r="2" fill="#ffffff"/>
+      <path d="M24 40C24 44 32 46 40 40" stroke="#1e293b" stroke-width="2" stroke-linecap="round"/>
+      <path d="M20 48L16 58H48L44 48H20Z" fill="#a855f7"/>
+    </svg>
+  </div>
+
+  <div class="char-float alien-3">
+    <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M32 14C22 14 16 22 16 32C16 42 22 46 32 46C42 46 48 42 48 32C48 22 42 14 32 14Z" fill="#a5f3fc"/>
+      <ellipse cx="22" cy="26" rx="4" ry="6" fill="#ffffff" stroke="#1e293b"/>
+      <circle cx="22" cy="26" r="2" fill="#1e293b"/>
+      <ellipse cx="32" cy="24" rx="4" ry="6" fill="#ffffff" stroke="#1e293b"/>
+      <circle cx="32" cy="24" r="2" fill="#1e293b"/>
+      <ellipse cx="42" cy="26" rx="4" ry="6" fill="#ffffff" stroke="#1e293b"/>
+      <circle cx="42" cy="26" r="2" fill="#1e293b"/>
+      <path d="M26 36H38" stroke="#1e293b" stroke-width="2" stroke-linecap="round"/>
+      <path d="M26 46L24 56H40L38 46H26Z" fill="#22d3ee"/>
+    </svg>
+  </div>
+
+  <div class="char-float alien-4">
+    <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M32 16C22 16 14 22 14 34C14 44 22 48 32 48C42 48 50 44 50 34C50 22 42 16 32 16Z" fill="#f472b6"/>
+      <circle cx="22" cy="28" r="3" fill="#ffffff"/> <circle cx="22" cy="28" r="1.5" fill="#000"/>
+      <circle cx="32" cy="24" r="4" fill="#ffffff"/> <circle cx="32" cy="24" r="2" fill="#000"/>
+      <circle cx="42" cy="28" r="3" fill="#ffffff"/> <circle cx="42" cy="28" r="1.5" fill="#000"/>
+      <path d="M26 38Q32 42 38 38" stroke="#1e293b" stroke-width="2" fill="none"/>
+      <path d="M22 48L18 56H46L42 48H22Z" fill="#ec4899"/>
+    </svg>
+  </div>
+
+  <div class="char-float alien-5">
+    <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M32 12C24 12 20 20 20 30C20 38 24 42 32 42C40 42 44 38 44 30C44 20 40 12 32 12Z" fill="#fb923c"/>
+      <path d="M26 14Q20 6 22 4" stroke="#fb923c" stroke-width="2" fill="none"/>
+      <path d="M38 14Q44 6 42 4" stroke="#fb923c" stroke-width="2" fill="none"/>
+      <circle cx="22" cy="4" r="2.5" fill="#f97316"/>
+      <circle cx="42" cy="4" r="2.5" fill="#f97316"/>
+      <ellipse cx="26" cy="26" rx="4" ry="5" fill="#1e293b"/>
+      <ellipse cx="38" cy="26" rx="4" ry="5" fill="#1e293b"/>
+      <path d="M28 34H36" stroke="#1e293b" stroke-width="2" stroke-linecap="round"/>
+      <path d="M24 42L20 54H44L40 42H24Z" fill="#f97316"/>
+    </svg>
+  </div>
+
+  <div class="char-float alien-6">
+    <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="32" cy="34" rx="18" ry="22" fill="#a3e635"/>
+      <path d="M20 14C20 8 26 4 32 4C38 4 44 8 44 14C44 22 38 28 32 28C26 28 20 22 20 14Z" fill="#84cc16"/>
+      <path d="M28 8L24 2" stroke="#a3e635" stroke-width="2.5" stroke-linecap="round"/>
+      <path d="M36 8L40 2" stroke="#a3e635" stroke-width="2.5" stroke-linecap="round"/>
+      <circle cx="24" cy="2" r="3" fill="#65a30d"/>
+      <circle cx="40" cy="2" r="3" fill="#65a30d"/>
+      <circle cx="32" cy="18" r="7" fill="#fff"/>
+      <circle cx="32" cy="18" r="3.5" fill="#166534"/>
+      <circle cx="30.5" cy="16.5" r="1.5" fill="#fff"/>
+      <circle cx="32" cy="18" r="1" fill="#000"/>
+      <path d="M25 38Q32 43 39 38" stroke="#1e293b" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <path d="M22 52L18 62H46L42 52H22Z" fill="#65a30d"/>
+    </svg>
+  </div>
+
+  <div class="char-float alien-7">
+    <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M26 2L20 8L22 18" stroke="#dc2626" stroke-width="3" stroke-linecap="round" fill="none"/>
+      <path d="M38 2L44 8L42 18" stroke="#dc2626" stroke-width="3" stroke-linecap="round" fill="none"/>
+      <circle cx="20" cy="7" r="3.5" fill="#ef4444"/>
+      <circle cx="44" cy="7" r="3.5" fill="#ef4444"/>
+      <path d="M20 20C20 12 26 8 32 8C38 8 44 12 44 20C44 34 40 44 32 44C24 44 20 34 20 20Z" fill="#f87171"/>
+      <ellipse cx="25" cy="26" rx="4.5" ry="5.5" fill="#fff"/>
+      <circle cx="25" cy="27" r="2.5" fill="#1e293b"/>
+      <circle cx="24" cy="25.5" r="1" fill="#fff"/>
+      <ellipse cx="39" cy="26" rx="4.5" ry="5.5" fill="#fff"/>
+      <circle cx="39" cy="27" r="2.5" fill="#1e293b"/>
+      <circle cx="38" cy="25.5" r="1" fill="#fff"/>
+      <path d="M27 36Q32 40 37 36" stroke="#7f1d1d" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <path d="M22 44L18 56H46L42 44H22Z" fill="#dc2626"/>
+      <rect x="28" y="47" width="8" height="5" rx="1" fill="#f87171"/>
+    </svg>
+  </div>
+
+  <div class="char-float alien-8">
+    <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="32" cy="8" rx="14" ry="4" fill="none" stroke="#fbbf24" stroke-width="2.5" opacity="0.8"/>
+      <path d="M32 10C20 10 16 20 16 30C16 42 22 50 32 50C42 50 48 42 48 30C48 20 44 10 32 10Z" fill="#fde68a"/>
+      <circle cx="24" cy="28" r="6" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.5"/>
+      <path d="M24 22L25 25L28 24L26 27L29 28L26 29L28 32L25 31L24 34L23 31L20 32L22 29L19 28L22 27L20 24L23 25Z" fill="#f59e0b"/>
+      <circle cx="40" cy="28" r="6" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.5"/>
+      <path d="M40 22L41 25L44 24L42 27L45 28L42 29L44 32L41 31L40 34L39 31L36 32L38 29L35 28L38 27L36 24L39 25Z" fill="#f59e0b"/>
+      <path d="M26 40Q32 45 38 40" stroke="#92400e" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <path d="M22 50L18 60H46L42 50H22Z" fill="#d97706"/>
+    </svg>
+  </div>
+
+  <div class="char-float alien-9">
+    <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M26 14Q22 5 20 3" stroke="#5eead4" stroke-width="2.5" stroke-linecap="round"/>
+      <path d="M38 14Q42 5 44 3" stroke="#5eead4" stroke-width="2.5" stroke-linecap="round"/>
+      <circle cx="20" cy="3" r="3.5" fill="#0d9488"/>
+      <circle cx="44" cy="3" r="3.5" fill="#0d9488"/>
+      <circle cx="32" cy="24" r="14" fill="#5eead4"/>
+      <ellipse cx="32" cy="38" rx="20" ry="14" fill="#2dd4bf"/>
+      <circle cx="32" cy="23" r="8" fill="#fff"/>
+      <circle cx="32" cy="24" r="5" fill="#0f766e"/>
+      <circle cx="30" cy="22" r="2" fill="#fff"/>
+      <circle cx="32" cy="24" r="1.5" fill="#000"/>
+      <path d="M25 32Q32 37 39 32" stroke="#0f766e" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <rect x="21" y="49" width="8" height="10" rx="4" fill="#0d9488"/>
+      <rect x="35" y="49" width="8" height="10" rx="4" fill="#0d9488"/>
+    </svg>
+  </div>
+
+  <div class="invitation-card">
+    <h1>Cosmic Talent Show</h1>
+    <p>We request the honor of your presence as our distinguished Chief Guest at this year's premiere interstellar showcase.</p>
+    <div class="event-details">
+      <div class="detail-item"><strong>Showtime:</strong> Saturday, October 14th, 2026</div>
+      <div class="detail-item"><strong>Doors Open:</strong> 18:00 Hours (IST)</div>
+      <div class="detail-item"><strong>Auditorium:</strong> Auditorium Layout</div>
     </div>
+    <button class="rsvp-btn" id="acceptBtn">Accept Invitation</button>
+  </div>
 
-    <div class="custom-popup-overlay" id="successPopup">
-        <div class="custom-popup-box">
-            <h2>Thank You</h2>
-            <p id="popupMessage">Thank you for accepting our invitation.<br>This page will close in 3 seconds.</p>
-        </div>
+  <div class="rocket-stage" id="rocketStage">
+    <div class="flame"></div>
+    <svg class="rocket" viewBox="0 0 60 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M30 5C30 5 45 25 45 55L40 75H20L15 55C15 25 30 5 30 5Z" fill="#E6E6E6"/>
+      <path d="M30 5C30 5 35 25 35 55L33 74H27L25 55C25 25 30 5 30 5Z" fill="#FFFFFF"/>
+      <path d="M15 60L5 78L15 75V60Z" fill="#E63946"/>
+      <path d="M45 60L55 78L45 75V60Z" fill="#E63946"/>
+      <path d="M25 75L30 85L35 75H25Z" fill="#A8DADC"/>
+      <circle cx="30" cy="35" r="7" fill="#1D3557"/>
+      <circle cx="30" cy="35" r="5" fill="#457B9D"/>
+    </svg>
+  </div>
+
+  <div class="cloud-deck">
+    <div class="cloud-puff puff-left-1"></div>
+    <div class="cloud-puff puff-left-2"></div>
+    <div class="cloud-puff puff-right-1"></div>
+    <div class="cloud-puff puff-right-2"></div>
+    <div class="cloud-puff puff-main-center"></div>
+    <div class="cloud-base-fill"></div>
+    <div class="cloud-interactive-zone">
+      <button class="launch-btn" id="launchBtn">LAUNCH INVITATION</button>
     </div>
+  </div>
+</div>
 
-    <div class="universe" id="universeContainer">
-        <div class="stars"></div>
+<script>
+/* ══ CLOUD RENDERING ENGINE ══ */
+function drawCloud(ctx, cx, cy, cw, ch) {
+  ctx.save();
+  const hw = cw / 2;
+  const cloudGrad = ctx.createLinearGradient(cx, cy - ch * 0.5, cx, cy + ch * 0.38);
+  cloudGrad.addColorStop(0, '#ffffff');
+  cloudGrad.addColorStop(0.35, '#f0f7ff');
+  cloudGrad.addColorStop(0.7, '#cbdff7');
+  cloudGrad.addColorStop(1, '#94bceb');
+  ctx.fillStyle = cloudGrad;
+  ctx.beginPath(); ctx.ellipse(cx, cy, hw, ch * 0.38, 0, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.arc(cx - hw * 0.70, cy - ch * 0.04, ch * 0.34, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.arc(cx - hw * 0.28, cy - ch * 0.35, ch * 0.50, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.arc(cx + hw * 0.10, cy - ch * 0.28, ch * 0.44, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.arc(cx + hw * 0.48, cy - ch * 0.14, ch * 0.36, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.arc(cx + hw * 0.74, cy - ch * 0.02, ch * 0.27, 0, Math.PI * 2); ctx.fill();
+  ctx.restore();
+}
 
-        <div class="planet earth"></div>
-        <div class="planet mars"></div>
-        <div class="planet jupiter"></div>
+const CLOUD_DEFS = [
+  [0.06,-0.02,0.18,0.12],[0.28,-0.04,0.24,0.15],[0.57,-0.03,0.26,0.16],[0.82,-0.02,0.20,0.13],
+  [0.03,0.14,0.13,0.09],[0.20,0.12,0.20,0.14],[0.47,0.10,0.25,0.16],[0.73,0.11,0.22,0.14],[0.96,0.13,0.13,0.09],
+  [0.11,0.28,0.21,0.14],[0.36,0.27,0.24,0.15],[0.64,0.27,0.22,0.14],[0.89,0.28,0.19,0.12],
+  [0.02,0.42,0.16,0.11],[0.24,0.41,0.20,0.13],[0.51,0.43,0.18,0.12],[0.76,0.42,0.21,0.13],[0.98,0.42,0.12,0.09],
+  [0.08,0.57,0.19,0.12],[0.33,0.56,0.22,0.14],[0.60,0.57,0.20,0.13],[0.85,0.56,0.22,0.14],
+  [0.01,0.71,0.15,0.10],[0.18,0.70,0.20,0.13],[0.44,0.72,0.23,0.14],[0.69,0.71,0.21,0.13],[0.93,0.72,0.16,0.11],
+  [0.08,0.87,0.21,0.14],[0.32,0.88,0.24,0.15],[0.58,0.87,0.22,0.14],[0.84,0.88,0.20,0.13],
+  [0.50,0.28,0.14,0.09],[0.15,0.57,0.15,0.10],[0.40,0.13,0.14,0.09],
+];
 
-        <div class="saturn-container">
-            <div class="saturn"></div>
-            <div class="saturn-rings"></div>
-        </div>
+function mulberry32(a) {
+  return function() {
+    a |= 0; a = a + 0x6D2B79F5 | 0;
+    let t = Math.imul(a ^ a >>> 15, 1 | a);
+    t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+  }
+}
 
-        <!-- Neptune — new planet on the right side -->
-        <div class="planet neptune"></div>
+function renderClouds(canvas) {
+  const W = window.innerWidth, H = window.innerHeight;
+  canvas.width = W; canvas.height = H;
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = '#03050d';
+  ctx.fillRect(0, 0, W, H);
+  const rng = mulberry32(12345);
+  for (let i = 0; i < 280; i++) {
+    const x = rng() * W, y = rng() * H, r = rng() * 1.2 + 0.2, a = rng() * 0.7 + 0.15;
+    ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(255,255,255,${a})`; ctx.fill();
+  }
+  CLOUD_DEFS.forEach(([xf, yf, wf, hf]) => {
+    drawCloud(ctx, xf * W, yf * H, Math.max(wf * W, 120), Math.max(hf * H, 60));
+  });
+}
 
-        <div class="planet moon"></div>
+/* ══ CURSOR (desktop only) ══ */
+const curSystem = document.getElementById('cur-system');
+let mouseX = window.innerWidth / 2, mouseY = window.innerHeight / 2;
+let ringX = mouseX, ringY = mouseY;
 
-        <!-- Alien 1 – green, top-left area -->
-        <div class="char-float alien-1">
-            <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M32 12C20 12 16 22 16 32C16 42 22 48 32 48C42 48 48 42 48 32C48 22 44 12 32 12Z" fill="#a7f3d0"/>
-                <path d="M24 14L18 6" stroke="#a7f3d0" stroke-width="3" stroke-linecap="round"/>
-                <path d="M40 14L46 6" stroke="#a7f3d0" stroke-width="3" stroke-linecap="round"/>
-                <circle cx="18" cy="5" r="4" fill="#34d399"/>
-                <circle cx="46" cy="5" r="4" fill="#34d399"/>
-                <ellipse cx="25" cy="28" rx="5" ry="7" fill="#1e293b"/>
-                <ellipse cx="39" cy="28" rx="5" ry="7" fill="#1e293b"/>
-                <circle cx="24" cy="26" r="2" fill="#ffffff"/>
-                <circle cx="38" cy="26" r="2" fill="#ffffff"/>
-                <path d="M28 38C28 40 34 40 34 38" stroke="#1e293b" stroke-width="2" stroke-linecap="round"/>
-                <path d="M24 46L20 56H44L40 46H24Z" fill="#38bdf8"/>
-                <rect x="28" y="48" width="8" height="5" rx="1" fill="#f43f5e"/>
-            </svg>
-        </div>
+window.addEventListener('mousemove', e => { mouseX = e.clientX; mouseY = e.clientY; });
+(function animCursorLoop() {
+  ringX += (mouseX - ringX) * 0.13;
+  ringY += (mouseY - ringY) * 0.13;
+  curSystem.style.transform = `translate3d(${ringX}px,${ringY}px,0)`;
+  requestAnimationFrame(animCursorLoop);
+})();
+window.addEventListener('mousedown', () => document.body.classList.add('click'));
+window.addEventListener('mouseup',   () => document.body.classList.remove('click'));
 
-        <!-- Alien 2 – orange, right-center area -->
-        <div class="char-float alien-2">
-            <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M32 12C24 12 20 20 20 30C20 38 24 42 32 42C40 42 44 38 44 30C44 20 40 12 32 12Z" fill="#fb923c"/>
-                <path d="M26 14Q20 6 22 4" stroke="#fb923c" stroke-width="2" fill="none"/>
-                <path d="M38 14Q44 6 42 4" stroke="#fb923c" stroke-width="2" fill="none"/>
-                <circle cx="22" cy="4" r="2.5" fill="#f97316"/>
-                <circle cx="42" cy="4" r="2.5" fill="#f97316"/>
-                <ellipse cx="26" cy="26" rx="4" ry="5" fill="#1e293b"/>
-                <ellipse cx="38" cy="26" rx="4" ry="5" fill="#1e293b"/>
-                <path d="M28 34H36" stroke="#1e293b" stroke-width="2" stroke-linecap="round"/>
-                <path d="M24 42L20 54H44L40 42H24Z" fill="#f97316"/>
-            </svg>
-        </div>
+function attachHoverEffects(elements) {
+  elements.forEach(el => {
+    el.addEventListener('mouseenter', () => document.body.classList.add('hov'));
+    el.addEventListener('mouseleave', () => document.body.classList.remove('hov'));
+  });
+}
 
-        <!-- Alien 3 – purple, top-right area -->
-        <div class="char-float alien-3">
-            <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M32 10C20 10 14 20 14 32C14 44 20 52 32 52C44 52 50 44 50 32C50 20 44 10 32 10Z" fill="#d8b4fe"/>
-                <path d="M32 10V4" stroke="#d8b4fe" stroke-width="3" stroke-linecap="round"/>
-                <circle cx="32" cy="4" r="4" fill="#a855f7"/>
-                <circle cx="32" cy="26" r="10" fill="#ffffff" stroke="#1e293b" stroke-width="2"/>
-                <circle cx="32" cy="26" r="5" fill="#1e293b"/>
-                <circle cx="30" cy="24" r="2" fill="#ffffff"/>
-                <path d="M24 40C24 44 32 46 40 40" stroke="#1e293b" stroke-width="2" stroke-linecap="round"/>
-                <path d="M20 48L16 58H48L44 48H20Z" fill="#a855f7"/>
-            </svg>
-        </div>
+/* ══ INIT ══ */
+window.addEventListener('DOMContentLoaded', () => {
+  renderClouds(document.getElementById('cloud-L'));
+  renderClouds(document.getElementById('cloud-R'));
+  attachHoverEffects(document.querySelectorAll('button'));
+  setTimeout(() => { document.getElementById('curtain').classList.add('open'); }, 1800);
+});
 
-        <!-- Alien 4 – pink, left-mid area -->
-        <div class="char-float alien-4">
-            <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M32 16C22 16 14 22 14 34C14 44 22 48 32 48C42 48 50 44 50 34C50 22 42 16 32 16Z" fill="#f472b6"/>
-                <circle cx="22" cy="28" r="3" fill="#ffffff"/>
-                <circle cx="22" cy="28" r="1.5" fill="#000"/>
-                <circle cx="32" cy="24" r="4" fill="#ffffff"/>
-                <circle cx="32" cy="24" r="2" fill="#000"/>
-                <circle cx="42" cy="28" r="3" fill="#ffffff"/>
-                <circle cx="42" cy="28" r="1.5" fill="#000"/>
-                <path d="M26 38Q32 42 38 38" stroke="#1e293b" stroke-width="2" fill="none"/>
-                <path d="M22 48L18 56H46L42 48H22Z" fill="#ec4899"/>
-            </svg>
-        </div>
+/* ══ ACTIONS ══ */
+const launchBtn      = document.getElementById('launchBtn');
+const acceptBtn      = document.getElementById('acceptBtn');
+const universeContainer = document.getElementById('universeContainer');
+const successPopup   = document.getElementById('successPopup');
+const popupMessage   = document.getElementById('popupMessage');
 
-        <!-- Alien 5 – cyan, lower-left area -->
-        <div class="char-float alien-5">
-            <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M32 14C22 14 16 22 16 32C16 42 22 46 32 46C42 46 48 42 48 32C48 22 42 14 32 14Z" fill="#a5f3fc"/>
-                <ellipse cx="22" cy="26" rx="4" ry="6" fill="#ffffff" stroke="#1e293b" stroke-width="1"/>
-                <circle cx="22" cy="26" r="2" fill="#1e293b"/>
-                <ellipse cx="32" cy="24" rx="4" ry="6" fill="#ffffff" stroke="#1e293b" stroke-width="1"/>
-                <circle cx="32" cy="24" r="2" fill="#1e293b"/>
-                <ellipse cx="42" cy="26" rx="4" ry="6" fill="#ffffff" stroke="#1e293b" stroke-width="1"/>
-                <circle cx="42" cy="26" r="2" fill="#1e293b"/>
-                <path d="M26 36H38" stroke="#1e293b" stroke-width="2" stroke-linecap="round"/>
-                <path d="M26 46L24 56H40L38 46H26Z" fill="#22d3ee"/>
-            </svg>
-        </div>
+launchBtn.addEventListener('click', () => {
+  universeContainer.classList.add('launched');
+  launchBtn.disabled = true;
+  launchBtn.style.opacity = '0';
+  launchBtn.style.pointerEvents = 'none';
+});
 
-        <!-- Invitation Card -->
-        <div class="invitation-card">
-            <h1>Cosmic Talent Show</h1>
-            <p>We request the honor of your presence as our distinguished Chief Guest at this year's premiere interstellar showcase.</p>
-
-            <div class="event-details">
-                <div class="detail-item"><strong>Showtime:</strong> Saturday, October 14th, 2026</div>
-                <div class="detail-item"><strong>Doors Open:</strong> 18:00 Hours (IST)</div>
-                <div class="detail-item"><strong>Auditorium:</strong> Main Auditorium</div>
-            </div>
-
-            <button class="rsvp-btn" id="acceptBtn">Accept Invitation</button>
-        </div>
-
-        <!-- Rocket -->
-        <div class="rocket-area" id="rocketArea">
-            <div style="position:relative">
-                <div class="flame" id="flame"></div>
-                <svg width="80" viewBox="0 0 60 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M30 5C30 5 45 25 45 55L40 75H20L15 55C15 25 30 5 30 5Z" fill="#E6E6E6"/>
-                    <path d="M30 5C30 5 35 25 35 55L33 74H27L25 55C25 25 30 5 30 5Z" fill="#FFFFFF"/>
-                    <path d="M15 60L5 78L15 75V60Z" fill="#E63946"/>
-                    <path d="M45 60L55 78L45 75V60Z" fill="#E63946"/>
-                    <path d="M25 75L30 85L35 75H25Z" fill="#A8DADC"/>
-                    <circle cx="30" cy="35" r="7" fill="#1D3557"/>
-                    <circle cx="30" cy="35" r="5" fill="#457B9D"/>
-                </svg>
-            </div>
-        </div>
-
-        <!-- Cloud Deck -->
-        <div class="cloud-deck" id="cloudDeck">
-            <div class="cloud-puff puff-left-1"></div>
-            <div class="cloud-puff puff-left-2"></div>
-            <div class="cloud-puff puff-right-1"></div>
-            <div class="cloud-puff puff-right-2"></div>
-            <div class="cloud-puff puff-main-center"></div>
-            <div class="cloud-base-fill"></div>
-
-            <div class="cloud-interactive-zone">
-                <button class="launch-btn" id="launchBtn">LAUNCH INVITATION</button>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        const launchBtn    = document.getElementById('launchBtn');
-        const acceptBtn    = document.getElementById('acceptBtn');
-        const universe     = document.getElementById('universeContainer');
-        const solarCursor  = document.getElementById('solar-cursor');
-        const successPopup = document.getElementById('successPopup');
-        const popupMessage = document.getElementById('popupMessage');
-
-        launchBtn.addEventListener('click', () => {
-            universe.classList.add('launched');
-            launchBtn.disabled = true;
-            launchBtn.style.opacity = '0';
-            launchBtn.style.pointerEvents = 'none';
-        });
-
-        acceptBtn.addEventListener('click', () => {
-            successPopup.classList.add('show');
-            setTimeout(() => {
-                window.close();
-                popupMessage.innerHTML =
-                    "Thank you for accepting our invitation.<br>" +
-                    "<span style='color:#ff9e00;font-weight:bold'>You may now safely close this tab.</span>";
-            }, 3000);
-        });
-
-        window.addEventListener('mousemove', (e) => {
-            solarCursor.style.left = e.clientX + 'px';
-            solarCursor.style.top  = e.clientY + 'px';
-        });
-    </script>
+acceptBtn.addEventListener('click', () => {
+  successPopup.classList.add('show');
+  setTimeout(() => {
+    window.close();
+    popupMessage.innerHTML = "Thank you for accepting our invitation.<br><span style='color:#ff9e00;font-weight:bold;'>You may now safely close this tab.</span>";
+  }, 3000);
+});
+</script>
 </body>
 </html>
